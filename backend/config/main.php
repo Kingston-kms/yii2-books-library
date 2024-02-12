@@ -11,7 +11,15 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'yii\grid\GridView' => [
+            'pager' => [
+                'linkContainerOptions' => [
+                    'class' => 'page-item'
+                ]
+            ]
+        ]
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
