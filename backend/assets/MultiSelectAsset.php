@@ -1,0 +1,1 @@
+<?phpnamespace backend\assets;class MultiSelectAsset extends \yii\web\AssetBundle{    public $basePath = '@webroot';    public $baseUrl = '@web';    public $css = [        'css/multi-select.css',    ];    public $js = [        'js/jquery.multi-select.js'    ];    public $depends = [        'yii\web\YiiAsset'    ];}

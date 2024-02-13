@@ -11,8 +11,10 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $name
+ * @property int $parent_category
  *
  * @property BookCategory[] $bookCategories
+ * @property Category $parentCategory
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -34,6 +36,7 @@ class Category extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['name'], 'string', 'max' => 255],
             [['name'], 'unique'],
+            ['parent_category', 'number']
         ];
     }
 
@@ -45,6 +48,7 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'parent_category' => 'Parent Category'
         ];
     }
 
@@ -56,6 +60,10 @@ class Category extends \yii\db\ActiveRecord
     public function getBookCategories()
     {
         return $this->hasMany(BookCategory::class, ['category' => 'id']);
+    }
+    public function getParentCategory()
+    {
+        return $this->hasOne(self::class, ['id' => 'parent_category']);
     }
     public static function addCategory(string $categoryName): bool
     {

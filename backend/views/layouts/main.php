@@ -5,12 +5,16 @@
 
 use backend\assets\AppAsset;
 use common\widgets\Alert;
+use yii\helpers\Url;
 use yii\bootstrap4\Breadcrumbs;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
 AppAsset::register($this);
+
+use kartik\icons\FontAwesomeAsset;
+FontAwesomeAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -36,6 +40,8 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Category', 'url' => ['category/index']],
+        ['label' => 'Book', 'url' => ['books/index']]
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];

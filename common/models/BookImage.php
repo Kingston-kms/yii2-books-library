@@ -1,0 +1,1 @@
+<?phpnamespace common\models;class BookImage{}

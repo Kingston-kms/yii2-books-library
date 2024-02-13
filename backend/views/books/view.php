@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Book;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -25,20 +26,38 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+    <div class="row">
+        <div class="col-sm-3 p-5">
+            <img src="<?php echo $model->imageFile; ?>" width="150"/>
+        </div>
+        <div class="col-sm-9">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id',
+                    'isbn',
+                    'title',
+                    'published_date',
+                    'page_count',
+                    //'imageFile:url',
+                    'short_description' => [
+                        'attribute' => 'short_description',
+                        'format' => 'html'
+                    ],
+                    'long_description' => [
+                        'attribute' => 'long_description',
+                        'format' => 'raw'
+                    ],
+                    'status' => [
+                        'attribute' => 'status',
+                        'value' => $model->status0->name
+                    ]
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'isbn',
-            'title',
-            'published_date',
-            'page_count',
-            'thumbnail_url:url',
-            'short_description',
-            'long_description',
-            'status',
-        ],
-    ]) ?>
+
+                ],
+            ]) ?>
+        </div>
+    </div>
+
 
 </div>

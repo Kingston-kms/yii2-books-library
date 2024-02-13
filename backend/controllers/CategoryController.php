@@ -2,18 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\Book;
-use common\models\search\BookSearch;
+use common\models\Category;
+use common\models\search\CategorySearch;
 use backend\components\AccessController;
-use yii\helpers\FileHelper;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
 
 /**
- * BooksController implements the CRUD actions for Book model.
+ * CategoryController implements the CRUD actions for Category model.
  */
-class BooksController extends AccessController
+class CategoryController extends AccessController
 {
     /**
      * @inheritDoc
@@ -34,13 +32,13 @@ class BooksController extends AccessController
     }
 
     /**
-     * Lists all Book models.
+     * Lists all Category models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new BookSearch();
+        $searchModel = new CategorySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -50,7 +48,7 @@ class BooksController extends AccessController
     }
 
     /**
-     * Displays a single Book model.
+     * Displays a single Category model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -63,19 +61,17 @@ class BooksController extends AccessController
     }
 
     /**
-     * Creates a new Book model.
+     * Creates a new Category model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Book();
+        $model = new Category();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
-                if ($this->uploadImageFile($model) && $model->save()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -86,25 +82,8 @@ class BooksController extends AccessController
         ]);
     }
 
-    private function uploadImageFile(Book $model): bool
-    {
-        $imageFile = UploadedFile::getInstance($model, 'imageFile');
-        if (is_null($imageFile)) {
-            return !$model->isNewRecord;
-        }
-        $oldThumbnail = $model->thumbnail_url;
-        $model->thumbnail_url = \Yii::$app->security->generateRandomString() . '.'. $imageFile->extension;
-        $isSaved = $imageFile->saveAs(FileHelper::normalizePath(\Yii::getAlias('@imagePath')  . '/' . $model->thumbnail_url));
-        if (!$isSaved) {
-            $model->addError('imageFile', 'Can not upload image');
-        } else {
-            FileHelper::unlink(FileHelper::normalizePath(\Yii::getAlias('@imagePath')  . '/' . $oldThumbnail));
-        }
-        return $isSaved;
-    }
-
     /**
-     * Updates an existing Book model.
+     * Updates an existing Category model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -114,10 +93,8 @@ class BooksController extends AccessController
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post())) {
-            if ($this->uploadImageFile($model) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -126,7 +103,7 @@ class BooksController extends AccessController
     }
 
     /**
-     * Deletes an existing Book model.
+     * Deletes an existing Category model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -140,15 +117,15 @@ class BooksController extends AccessController
     }
 
     /**
-     * Finds the Book model based on its primary key value.
+     * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Book the loaded model
+     * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Book::findOne(['id' => $id])) !== null) {
+        if (($model = Category::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

@@ -23,7 +23,9 @@ use Yii;
  */
 class Book extends \yii\db\ActiveRecord
 {
-
+    public $imageFile;
+    public $_categories;
+    public $_authors;
     public static array $columnMapping = [
         'publishedDate' => 'published_date',
         'thumbnailUrl' => 'thumbnail_url',
@@ -39,6 +41,12 @@ class Book extends \yii\db\ActiveRecord
     {
         return 'book';
     }
+    public function afterFind()
+    {
+        parent::afterFind();
+        $this->imageFile = \Yii::$app->params['frontendDomain'] . '/' . \Yii::$app->params['imageWebDir'] . '/' . $this->thumbnail_url;
+
+    }
 
     /**
      * {@inheritdoc}
@@ -47,7 +55,7 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             [['status'], 'required'],
-            [['published_date'], 'safe'],
+            [['published_date', 'imageFile', '_categories', '_authors'], 'safe'],
             [['page_count', 'status'], 'integer'],
             [['isbn', 'title'], 'string', 'max' => 255],
             [['thumbnail_url'], 'string', 'max' => 255],
@@ -68,13 +76,47 @@ class Book extends \yii\db\ActiveRecord
             'title' => 'Title',
             'published_date' => 'Published Date (UTC)',
             'page_count' => 'Page Count',
-            'thumbnail_url' => 'Thumbnail Url',
+            'thumbnail_url' => 'Thumbnail Image',
             'short_description' => 'Short Description',
             'long_description' => 'Long Description',
             'status' => 'Status',
+            'imageFile' => 'Thumbnail Image',
+            '_categories' => 'Category',
+            '_authors' => 'Authors'
         ];
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if (!empty($this->_categories)) {
+            foreach ($this->_categories as $category) {
+                BookCategory::addBookCategory($this->id, $category);
+            }
+        }
+        if (!empty($this->_authors)) {
+            foreach ($this->_authors as $author) {
+                BookAuthor::addBookAuthor($this->id, $author);
+            }
+        }
+
+        if (!$insert) {
+            if (!empty($this->_categories)) {
+                BookCategory::deleteAll([
+                    'AND',
+                    ['book' => $this->id],
+                    ['NOT IN', 'category', array_values($this->_categories)]
+                ]);
+            }
+            if (!empty($this->_authors)) {
+                BookAuthor::deleteAll([
+                    'AND',
+                    ['book' => $this->id],
+                    ['NOT IN', 'author', array_values($this->_authors)]
+                ]);
+            }
+        }
+    }
 
     /**
      * Gets query for [[BookAuthors]].
@@ -113,7 +155,6 @@ class Book extends \yii\db\ActiveRecord
     public static function addBook(&$data): Book|bool
     {
         if (isset($data['isbn']) && self::hasBookByIsbn($data['isbn'])) return false;
-
         $book = new self();
         $book->setAttributes($data);
         $book->save();
