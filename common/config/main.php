@@ -9,5 +9,10 @@ return [
         'cache' => [
             'class' => \yii\caching\FileCache::class,
         ],
+        'reCaptcha' => [
+            'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
+            'siteKeyV3' => '',
+            'secretV3' => '',
+        ],
     ],
 ];

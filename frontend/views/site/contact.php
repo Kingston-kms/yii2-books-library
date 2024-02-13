@@ -4,6 +4,8 @@
 /** @var yii\bootstrap4\ActiveForm $form */
 /** @var \frontend\models\ContactForm $model */
 
+use borales\extensions\phoneInput\PhoneInput;
+use himiklab\yii2\recaptcha\ReCaptcha3;
 use yii\bootstrap4\Html;
 use yii\bootstrap4\ActiveForm;
 use yii\captcha\Captcha;
@@ -26,13 +28,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'email') ?>
 
-                <?= $form->field($model, 'subject') ?>
+                <?= $form->field($model, 'phone')->widget(PhoneInput::class, [
+                    'jsOptions' => [
+                        'preferredCountries' => ['ru'],
+                    ]
+                ]) ?>
 
                 <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
 
-                <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
-                    'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',
-                ]) ?>
+                <?php $form->field($model, 'reCaptcha')->widget(
+                    ReCaptcha3::class,
+                    [
+                        'action' => 'contact',
+                    ]
+                ) ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Submit', ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>

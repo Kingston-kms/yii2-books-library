@@ -22,7 +22,9 @@
         "kartik-v/yii2-widget-datetimepicker": "dev-master",
         "kartik-v/yii2-icons": "^1.4",
         "kartik-v/yii2-widget-fileinput": "dev-master",
-        "2amigos/yii2-multi-select-widget": "*"
+        "2amigos/yii2-multi-select-widget": "*",
+        "himiklab/yii2-recaptcha-widget": "*",
+        "borales/yii2-phone-input": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -2,6 +2,8 @@
 
 namespace frontend\models;
 
+use borales\extensions\phoneInput\PhoneInputValidator;
+use libphonenumber\PhoneNumberFormat;
 use Yii;
 use yii\base\Model;
 
@@ -14,7 +16,8 @@ class ContactForm extends Model
     public $email;
     public $subject;
     public $body;
-    public $verifyCode;
+    public $phone;
+    public $reCaptcha;
 
 
     /**
@@ -23,12 +26,16 @@ class ContactForm extends Model
     public function rules()
     {
         return [
-            // name, email, subject and body are required
-            [['name', 'email', 'subject', 'body'], 'required'],
-            // email has to be a valid email address
+            [['email', 'body'], 'required'],
+            [['phone'], PhoneInputValidator::class, 'region' => ['ru']],
+            [['name'], 'string'],
             ['email', 'email'],
-            // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
+            [
+                ['reCaptcha'],
+                \himiklab\yii2\recaptcha\ReCaptchaValidator3::class,
+                'threshold' => 0.5,
+                'action' => 'contact'
+            ]
         ];
     }
 
@@ -38,7 +45,8 @@ class ContactForm extends Model
     public function attributeLabels()
     {
         return [
-            'verifyCode' => 'Verification Code',
+            'reCaptcha' => 'Verification Code',
+            'body' => 'Message'
         ];
     }
 
@@ -54,7 +62,7 @@ class ContactForm extends Model
             ->setTo($email)
             ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
             ->setReplyTo([$this->email => $this->name])
-            ->setSubject($this->subject)
+            ->setSubject('Feedback Notification Message')
             ->setTextBody($this->body)
             ->send();
     }

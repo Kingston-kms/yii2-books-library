@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use common\models\Feedback;
+use common\models\Setting;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -122,7 +124,14 @@ class SiteController extends Controller
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+            $adminEmail = Setting::getSettingByKey(Setting::EMAIL_KEY);
+            if ($model->sendEmail($adminEmail)) {
+                Feedback::addFeedbackMessage([
+                    'send_to' => $model->email,
+                    'name' => $model->name,
+                    'phone' => $model->phone,
+                    'message' => $model->body
+                ]);
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
             } else {
                 Yii::$app->session->setFlash('error', 'There was an error sending your message.');
@@ -134,16 +143,6 @@ class SiteController extends Controller
         return $this->render('contact', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 
     /**

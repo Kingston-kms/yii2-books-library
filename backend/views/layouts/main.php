@@ -40,8 +40,9 @@ FontAwesomeAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Category', 'url' => ['category/index']],
-        ['label' => 'Book', 'url' => ['books/index']]
+        ['label' => 'Category', 'url' => ['/category/index']],
+        ['label' => 'Book', 'url' => ['/books/index']],
+        ['label' => 'Setting', 'url' => ['/setting/index']]
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
