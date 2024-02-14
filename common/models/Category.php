@@ -65,7 +65,7 @@ class Category extends \yii\db\ActiveRecord
     {
         return $this->hasOne(self::class, ['id' => 'parent_category']);
     }
-    public static function addCategory(string $categoryName): bool
+    public static function addCategory(string $categoryName)
     {
         if (self::hasCategory($categoryName)) {
             return self::find()->select(['id'])->where(['name' => $categoryName])->scalar();
