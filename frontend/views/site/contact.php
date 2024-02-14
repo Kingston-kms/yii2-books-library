@@ -37,10 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
 
                 <?php $form->field($model, 'reCaptcha')->widget(
-                    ReCaptcha3::class,
-                    [
-                        'action' => 'contact',
-                    ]
+                    \himiklab\yii2\recaptcha\ReCaptcha2::class
                 ) ?>
 
                 <div class="form-group">

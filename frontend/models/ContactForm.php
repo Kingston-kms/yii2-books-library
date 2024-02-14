@@ -32,9 +32,7 @@ class ContactForm extends Model
             ['email', 'email'],
             [
                 ['reCaptcha'],
-                \himiklab\yii2\recaptcha\ReCaptchaValidator3::class,
-                'threshold' => 0.5,
-                'action' => 'contact'
+                \himiklab\yii2\recaptcha\ReCaptchaValidator2::class
             ]
         ];
     }
