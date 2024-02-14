@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52e00bdcbf2da5dbd24eb2da6778fe0e",
+    "content-hash": "cac17f0536c3e9198d37558b9b1a0d25",
     "packages": [
         {
             "name": "2amigos/yii2-multi-select-widget",
@@ -6821,7 +6821,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.0 <8.1"
+        "php": ">=8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
