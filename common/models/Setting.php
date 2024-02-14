@@ -32,7 +32,7 @@ class Setting extends \yii\db\ActiveRecord
     {
         return [
             [['key'], 'required'],
-            [['key'], 'integer'],
+            [['key'], 'string'],
             [['value'], 'string', 'max' => 255],
             [['key'], 'unique'],
         ];
