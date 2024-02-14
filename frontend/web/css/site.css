@@ -101,3 +101,16 @@ a.desc:after {
 {
     text-decoration: none;
 }
+
+.category-item {
+    padding: 5px;
+    border: 1px solid darkblue;
+    border-radius: 5px;
+}
+
+.book-item {
+    margin: 5px;
+    padding: 10px;
+    border: 2px solid darkgray;
+    border-radius: 5px;
+}
