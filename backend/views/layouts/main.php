@@ -42,6 +42,7 @@ FontAwesomeAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Category', 'url' => ['/category/index']],
         ['label' => 'Book', 'url' => ['/books/index']],
+        ['label' => 'Feedback', 'url' => ['/feedback/index']],
         ['label' => 'Setting', 'url' => ['/setting/index']]
     ];
     if (Yii::$app->user->isGuest) {
