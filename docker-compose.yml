@@ -1,28 +1,45 @@
-version: '3.2'
-
 services:
-
-  frontend:
-    build: frontend
-    ports:
-      - 20080:80
+  composer:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.composer
+    container_name: yii_composer
     volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
+      - .:/app
+    command: install --ignore-platform-reqs
+    working_dir: /app
+    user: $PACKAGER
 
-  backend:
-    build: backend
-    ports:
-      - 21080:80
+  php-cli:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.php-cli
+    links:
+      - composer
+    user: $PACKAGER
     volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
+      - .:/app
+    working_dir: /app
+
+  nginx:
+    container_name: yii_web
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.nginx
+    volumes:
+      - .:/var/www
+      - ./logs/docker/nginx:/var/log/nginx
+    working_dir: /var/www
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    links:
+      - composer
+
 
   mysql:
+    container_name: yii_db
     image: mysql:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=verysecret
