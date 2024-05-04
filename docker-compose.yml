@@ -11,6 +11,7 @@ services:
     user: $PACKAGER
 
   php-cli:
+    container_name: yii_cli
     build:
       context: .
       dockerfile: ./docker/Dockerfile.php-cli
@@ -20,6 +21,11 @@ services:
     volumes:
       - .:/app
     working_dir: /app
+
+  php-fpm:
+    container_name: yii_fpm
+
+
 
   nginx:
     container_name: yii_web
@@ -36,6 +42,7 @@ services:
       - mysql
     links:
       - composer
+      - php-cli
 
 
   mysql:
