@@ -8,6 +8,8 @@ up:
 down:
 	docker compose down --rmi local
 
+rebuild: down up
+
 init-prod:
 	docker exec yii_cli php init --env=Production --overwrite=All --delete=All
 

@@ -1,4 +1,4 @@
-FROM php:8.3-cli-alpine as base
+FROM php:8.3-fpm-alpine as base
 
 RUN apk add icu-dev
 RUN docker-php-ext-install mysqli
@@ -35,4 +35,4 @@ RUN pecl install \
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN echo "expose_php=0" >> "$PHP_INI_DIR/php.ini"
 
-CMD sleep infinity
+EXPOSE 9000

@@ -18,14 +18,31 @@ services:
     links:
       - composer
     user: $PACKAGER
+    env_file:
+      - .env
+      - .env.local
     volumes:
       - .:/app
+    depends_on:
+      - mysql
     working_dir: /app
 
   php-fpm:
     container_name: yii_fpm
-
-
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.php-fpm
+    user: $PACKAGER
+    env_file:
+      - .env
+      - .env.local
+    volumes:
+      - .:/var/www/
+    working_dir: /var/www/
+    depends_on:
+      - mysql
+    links:
+      - composer
 
   nginx:
     container_name: yii_web
@@ -43,20 +60,12 @@ services:
     links:
       - composer
       - php-cli
-
+      - php-fpm
 
   mysql:
     container_name: yii_db
     image: mysql:5.7
-    environment:
-      - MYSQL_ROOT_PASSWORD=verysecret
-      - MYSQL_DATABASE=yii2advanced
-      - MYSQL_USER=yii2advanced
-      - MYSQL_PASSWORD=secret
-
-  #pgsql:
-  #  image: postgres:9.5
-  #  environment:
-  #    - POSTGRES_DB=yii2advanced
-  #    - POSTGRES_USER=yii2advanced
-  #    - POSTGRES_PASSWORD=secret
+    env_file:
+      - .env
+      - .env.local
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
