@@ -56,11 +56,9 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - mysql
+      - php-fpm
     links:
       - composer
-      - php-cli
-      - php-fpm
 
   mysql:
     container_name: yii_db
