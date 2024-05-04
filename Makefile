@@ -3,10 +3,11 @@ export UID=$(shell id -u)
 export GID=$(shell id -g)
 
 up:
+	make check-env && \
 	docker compose up -d
 
 down:
-	docker compose down --rmi local
+	docker compose down --remove-orphans --rmi local
 
 rebuild: down up
 
@@ -18,3 +19,6 @@ init-dev:
 
 migrate:
 	docker exec yii_cli php yii migrate --interactive=0
+
+check-env:
+	test ! -e .env.local && touch .env.local
