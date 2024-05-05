@@ -2,6 +2,8 @@ export PACKAGER=$(shell id -u):$(shell id -g)
 export UID=$(shell id -u)
 export GID=$(shell id -g)
 
+ENV_LOCAL=.env.local
+
 up:
 	make check-env && \
 	docker compose up -d
@@ -21,4 +23,4 @@ migrate:
 	docker exec yii_cli php yii migrate --interactive=0
 
 check-env:
-	test ! -e .env.local && touch .env.local
+	test -f ./.env.local || touch ./.env.local
