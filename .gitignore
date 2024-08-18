@@ -42,5 +42,8 @@ phpunit.phar
 /backend/web/index.php
 /backend/web/index-test.php
 /backend/web/robots.txt
+/rest/web/index.php
+/rest/web/index-test.php
+/rest/web/robots.txt
 /logs/
 .env.local

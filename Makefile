@@ -14,13 +14,14 @@ down:
 rebuild: down up
 
 init-prod:
-	docker exec yii_cli php init --env=Production --overwrite=All --delete=All
+	docker exec yii_fpm php init --env=Production --overwrite=All --delete=All
 
 init-dev:
-	docker exec yii_cli php init --env=Development --overwrite=All --delete=All
+	docker exec yii_fpm php init --env=Development --overwrite=All --delete=All
 
 migrate:
-	docker exec yii_cli php yii migrate --interactive=0
+	docker exec yii_fpm php yii migrate --interactive=0
 
 check-env:
 	test -f ./.env.local || touch ./.env.local
+
